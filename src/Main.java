@@ -24,27 +24,38 @@ public class Main {
 		try{
 			BufferedReader buff = new BufferedReader(new FileReader(file));			
 			try {
-				String line = buff.readLine();
 				BigInteger p;
 				BigInteger q;
 				BigInteger g;
-				int i=0;
-				while (line.compareTo("genkey")!=0)
-				{
+				String line;
+				do { 
+					line = buff.readLine();
 					if (line.matches("[pqg]=\\d+"))
 					{
 						BigInteger pqg = new BigInteger(line.split("=")[1]);
 						switch (line.split("=")[0]){
-						
+						case"p":{
+							if (pqg.isProbablePrime(1)&(pqg.bitCount()==1024)){
+								p=pqg;
+							}
+							else {System.out.println("invalid_group");}
+							break;
 						}
-						
-						
+						case"q":{
+							if (pqg.isProbablePrime(1))
+							{
+								if (pqg.bitCount()==160){
+									q=pqg;
+								}
+							}
+						}
+						case"g":
+						default:					
+						}
 					}
-					else
-					{
-						
-					}
-				}		
+					else{}
+				} while(false);				
+								
 			}
 			finally {
 			buff.close();
