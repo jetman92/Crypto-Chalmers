@@ -20,7 +20,7 @@ public class Keys {
 		}
 		byte[] privkey = new byte[20];
 		privateKey = q;
-		while( ((q.compareTo(privateKey) == -1) || (q.compareTo(privateKey) == 0))){
+		while( (q.compareTo(privateKey) == -1) || (q.compareTo(privateKey) == 0) || (privateKey.compareTo(new BigInteger("0")) == 0)){
 			random.nextBytes(privkey);
 			privateKey = new BigInteger(privkey).abs();
 		}
@@ -30,8 +30,8 @@ public class Keys {
 		
 		publicKey = g.modPow(privateKey, p);
 		
-		/*System.out.println(privateKey.toString());
-		System.out.println(publicKey.toString());*/
+		System.out.println(privateKey.toString());
+		System.out.println(publicKey.toString());
 		
 		
 	}
