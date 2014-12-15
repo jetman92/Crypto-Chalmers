@@ -37,6 +37,11 @@ public class Keys {
 	}
 
 
+	public BigInteger getPrivateKey() {
+		return privateKey;
+	}
+
+
 	public BigInteger getPublicKey() {
 		return publicKey;
 	}
