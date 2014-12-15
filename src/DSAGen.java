@@ -43,7 +43,7 @@ public class DSAGen {
 		  }
 		  
 		  z = new BigInteger(build.toString());
-		  s = (new BigInteger("1").divide(k)).multiply((z.add(r.multiply(key.getPrivateKey()))));
+		  s = (new BigInteger("1").divide(k)).multiply((z.add(r.multiply(key.getPrivateKey())))).mod(com.getQ());
 		  
 		}
 		
