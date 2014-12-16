@@ -20,7 +20,7 @@ public class Main {
 		DSACommunity com = new DSACommunity(p, q, g);
 		Keys key = new Keys(com);*/
 		
-		File file= new File("inputFiles/genkey");
+		File file= new File("inputFiles/verify");
 		try{
 			BufferedReader buff = new BufferedReader(new FileReader(file));		
 			BigInteger p = null;
@@ -65,28 +65,64 @@ public class Main {
 						}
 						}
 					}
-					else {
-						if(line.compareTo("genkey")!=0){
-							System.out.println("invalid_fileformat");}}
-				} while(tupleIsOk && line.compareTo("genkey")!=0);
+				} while(tupleIsOk && (!line.matches("genkey") && !line.matches("sign") && !line.matches("verify")));
 				if (!tupleIsOk){
 					System.out.println("invalid_group");
 				}
 				else{
 					System.out.println("valid_group");
 					DSACommunity DSA = new DSACommunity(p, q, g);
-					line = buff.readLine();
-					if (line.matches("n=\\d+")){
-						n=Integer.parseInt(line.split("=")[1]);
-						for (int i=0; i<n;i++){
-							Keys keys = new Keys(DSA);	
+					switch (line){
+					case "genkey":{
+						line = buff.readLine();
+						if (line.matches("n=\\d+")){
+							n=Integer.parseInt(line.split("=")[1]);
+							for (int i=0; i<n;i++){
+								Keys keys = new Keys(DSA);
+								System.out.println("x="+keys.getPrivateKey().toString());
+								System.out.println("y="+keys.getPublicKey().toString());
+							}
 						}
+						else{System.out.println("invalid_fileformat");}
+						}
+						break;
+					
+					case"sign":{
+						line=buff.readLine();
+						BigInteger x= new BigInteger(line.split("=")[1]);
+						line=buff.readLine();
+						BigInteger y= new BigInteger(line.split("=")[1]);
+						Keys keys = new Keys(DSA);
+						keys.setPrivateKey(x);
+						keys.setPublicKey(y);
+						while((line=buff.readLine())!=null){
+							DSAGen DSAGen=new DSAGen(DSA,keys,line.split("=")[1]);
+							System.out.println("r="+DSAGen.getR().toString());
+							System.out.println("s="+DSAGen.getS().toString());
+						}
+						
+						break;	
+						
 					}
-					else{System.out.println("invalid_fileformat");}
+					case"verify":{
+						line=buff.readLine();
+						BigInteger y = new BigInteger(line.split("=")[1]);
+						Keys keys = new Keys(DSA);
+						keys.setPublicKey(y);
+						while((line=buff.readLine())!=null){
+							String D = line.split("=")[1];
+							line=buff.readLine();
+							BigInteger r =new BigInteger(line.split("=")[1]);
+							line=buff.readLine();
+							BigInteger s =new BigInteger(line.split("=")[1]);
+							new Verify(DSA, r, s, D, keys);
+						}
+						break;
+						
+					}
+					}
 					
-					
-				}				
-								
+				}											
 			}
 			finally {
 			buff.close();
