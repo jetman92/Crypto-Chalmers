@@ -30,8 +30,6 @@ public class Keys {
 		
 		publicKey = g.modPow(privateKey, p);
 		
-		System.out.println(privateKey.toString());
-		System.out.println(publicKey.toString());
 		
 		
 	}
