@@ -4,9 +4,9 @@ import java.math.BigInteger;
 public class DSAGen {
 	
 	private String DSA;
-	private BigInteger r;
+	private BigInteger r = new BigInteger("0");
 	private BigInteger z;
-	private BigInteger s;
+	private BigInteger s =  new BigInteger("0");
 	
 	public DSAGen(DSACommunity com, Keys key,String digest){
 		MessageSecretKey mKey = new MessageSecretKey(com);
@@ -42,8 +42,8 @@ public class DSAGen {
 			  build.append(binary.charAt(i));
 		  }
 		  
-		  z = new BigInteger(build.toString());
-		  s = (new BigInteger("1").divide(k)).multiply((z.add(r.multiply(key.getPrivateKey())))).mod(com.getQ());
+		  z = new BigInteger(build.toString(), 2);
+		  s = (k.modInverse(com.getQ())).multiply((z.add(r.multiply(key.getPrivateKey())))).mod(com.getQ());
 		  
 		}
 		
