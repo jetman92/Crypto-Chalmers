@@ -35,6 +35,16 @@ public class Keys {
 	}
 
 
+	public void setPrivateKey(BigInteger privateKey) {
+		this.privateKey = privateKey;
+	}
+
+
+	public void setPublicKey(BigInteger publicKey) {
+		this.publicKey = publicKey;
+	}
+
+
 	public BigInteger getPrivateKey() {
 		return privateKey;
 	}
