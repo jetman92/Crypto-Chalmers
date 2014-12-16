@@ -20,7 +20,7 @@ public class Main {
 		DSACommunity com = new DSACommunity(p, q, g);
 		Keys key = new Keys(com);*/
 		
-		File file= new File("inputFiles/verify");
+		File file= new File("inputFiles/verifytest");
 		try{
 			BufferedReader buff = new BufferedReader(new FileReader(file));		
 			BigInteger p = null;
