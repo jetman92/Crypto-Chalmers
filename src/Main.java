@@ -20,14 +20,16 @@ public class Main {
 		DSACommunity com = new DSACommunity(p, q, g);
 		Keys key = new Keys(com);*/
 		
-		File file= new File("inputFiles/testread.txt");
+		File file= new File("inputFiles/genkey");
 		try{
-			BufferedReader buff = new BufferedReader(new FileReader(file));			
-			try {
-				BigInteger p;
-				BigInteger q;
-				BigInteger g;
-				String line;
+			BufferedReader buff = new BufferedReader(new FileReader(file));		
+			BigInteger p = null;
+			BigInteger q = null;
+			BigInteger g = null;
+			int n = 0;
+			String line;
+			boolean tupleIsOk = true;
+			try {			
 				do { 
 					line = buff.readLine();
 					if (line.matches("[pqg]=\\d+"))
@@ -35,26 +37,55 @@ public class Main {
 						BigInteger pqg = new BigInteger(line.split("=")[1]);
 						switch (line.split("=")[0]){
 						case"p":{
-							if (pqg.isProbablePrime(1)&(pqg.bitCount()==1024)){
+							if (pqg.isProbablePrime(1)&&(pqg.bitLength()==1024)){
 								p=pqg;
 							}
-							else {System.out.println("invalid_group");}
+							else {tupleIsOk=false;}
 							break;
 						}
 						case"q":{
-							if (pqg.isProbablePrime(1))
+							if (pqg.isProbablePrime(1)&&(pqg.bitLength()==160)&&p!=null)
 							{
-								if (pqg.bitCount()==160){
+								BigInteger pMinusOne=p.subtract(BigInteger.ONE);
+								if(pMinusOne.mod(pqg)==BigInteger.ZERO)
+								{
 									q=pqg;
 								}
+								else{tupleIsOk=false;}
 							}
+							else{tupleIsOk=false;}
+							break;
 						}
-						case"g":
-						default:					
+						case"g":{
+							if (pqg.compareTo(BigInteger.ONE)==1 && q!=null && pqg.modPow(q,p).compareTo(BigInteger.ONE)==0){
+								g=pqg;
+							}
+							else{tupleIsOk=false;}
+							break;
+						}
 						}
 					}
-					else{}
-				} while(false);				
+					else {
+						if(line.compareTo("genkey")!=0){
+							System.out.println("invalid_fileformat");}}
+				} while(tupleIsOk && line.compareTo("genkey")!=0);
+				if (!tupleIsOk){
+					System.out.println("invalid_group");
+				}
+				else{
+					System.out.println("valid_group");
+					DSACommunity DSA = new DSACommunity(p, q, g);
+					line = buff.readLine();
+					if (line.matches("n=\\d+")){
+						n=Integer.parseInt(line.split("=")[1]);
+						for (int i=0; i<n;i++){
+							Keys keys = new Keys(DSA);	
+						}
+					}
+					else{System.out.println("invalid_fileformat");}
+					
+					
+				}				
 								
 			}
 			finally {
