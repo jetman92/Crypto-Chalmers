@@ -52,9 +52,10 @@ public class Verify {
 			  System.out.println("Signature valid");
 			 // return 1;
 		  }
+		  else{
 		  
 		  System.out.println("Signature invalid");
-		
+		  }
 		//return 0;
 	}
 
