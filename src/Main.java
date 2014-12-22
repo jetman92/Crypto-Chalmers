@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.math.BigInteger;
 import java.util.regex.*;
 
@@ -20,9 +21,10 @@ public class Main {
 		DSACommunity com = new DSACommunity(p, q, g);
 		Keys key = new Keys(com);*/
 		
-		File file= new File("inputFiles/verifytest");
+		//File file= new File("inputFiles/verifytest");
 		try{
-			BufferedReader buff = new BufferedReader(new FileReader(file));		
+			InputStreamReader in = new InputStreamReader(System.in);
+			BufferedReader buff = new BufferedReader(in);		
 			BigInteger p = null;
 			BigInteger q = null;
 			BigInteger g = null;
