@@ -4,6 +4,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigInteger;
+import java.util.Scanner;
 import java.util.regex.*;
 
 
@@ -22,9 +23,10 @@ public class Main {
 		Keys key = new Keys(com);*/
 		
 		//File file= new File("inputFiles/verifytest");
-		try{
-			InputStreamReader in = new InputStreamReader(System.in);
-			BufferedReader buff = new BufferedReader(in);		
+		//try{
+			//InputStreamReader in = new InputStreamReader(System.in);
+			//BufferedReader buff = new BufferedReader(in);		
+			Scanner buff = new Scanner(System.in);
 			BigInteger p = null;
 			BigInteger q = null;
 			BigInteger g = null;
@@ -33,7 +35,7 @@ public class Main {
 			boolean tupleIsOk = true;
 			try {			
 				do { 
-					line = buff.readLine();
+					line = buff.nextLine();
 					if (line.matches("[pqg]=\\d+"))
 					{
 						BigInteger pqg = new BigInteger(line.split("=")[1]);
@@ -76,7 +78,7 @@ public class Main {
 					DSACommunity DSA = new DSACommunity(p, q, g);
 					switch (line){
 					case "genkey":{
-						line = buff.readLine();
+						line = buff.nextLine();
 						if (line.matches("n=\\d+")){
 							n=Integer.parseInt(line.split("=")[1]);
 							for (int i=0; i<n;i++){
@@ -86,38 +88,39 @@ public class Main {
 							}
 						}
 						else{System.out.println("invalid_fileformat");}
-						}
 						break;
+						}
+						
 					
 					case"sign":{
-						line=buff.readLine();
+						line=buff.nextLine();
 						BigInteger x= new BigInteger(line.split("=")[1]);
-						line=buff.readLine();
+						line=buff.nextLine();
 						BigInteger y= new BigInteger(line.split("=")[1]);
 						Keys keys = new Keys(DSA);
 						keys.setPrivateKey(x);
 						keys.setPublicKey(y);
-						while((line=buff.readLine())!=null){
+						
+						while(!(line=buff.nextLine()).equals("")){				
 							DSAGen DSAGen=new DSAGen(DSA,keys,line.split("=")[1]);
 							System.out.println("r="+DSAGen.getR().toString());
-							System.out.println("s="+DSAGen.getS().toString());
-						}
-						
-						break;	
-						
+							System.out.println("s="+DSAGen.getS().toString());		
+						}	
+						break;							
 					}
 					case"verify":{
-						line=buff.readLine();
+						line=buff.nextLine();
 						BigInteger y = new BigInteger(line.split("=")[1]);
 						Keys keys = new Keys(DSA);
 						keys.setPublicKey(y);
-						while((line=buff.readLine())!=null){
+						while(!(line=buff.nextLine()).equals("")){
 							String D = line.split("=")[1];
-							line=buff.readLine();
+							line=buff.nextLine();
 							BigInteger r =new BigInteger(line.split("=")[1]);
-							line=buff.readLine();
+							line=buff.nextLine();
 							BigInteger s =new BigInteger(line.split("=")[1]);
-							new Verify(DSA, r, s, D, keys);
+							Verify  verif = new Verify(DSA, r, s, D, keys);
+							System.out.println(verif.getResult());
 						}
 						break;
 						
@@ -128,12 +131,13 @@ public class Main {
 			}
 			finally {
 			buff.close();
+			
 			}
-		} 
-		catch (IOException ioe) {
+		//} 
+		/*catch (IOException ioe) {
 			// erreur de fermeture des flux
 			System.out.println("Erreur --" + ioe.toString());
-			}
+			}*/
 		
 		
 		
